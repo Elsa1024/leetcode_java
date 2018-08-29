@@ -1,52 +1,36 @@
 import java.util.*;
-import java.lang.Math;
-
-class Solution {
-    public List<Integer> spiralOrder(int[][] matrix) {
-        int counter = 0;
-        int row = matrix.length;
-        int col = matrix[0].length;
-        List<Integer> spiralList = new ArrayList<>();
-        
-        if (row > 0 && col > 0) {
-            int right = col - 1, bottom = row - 1, left = 0, top = 0, total = row * col;
-            
-            outer:
-            for (int i = 0; i < row / 2 + row % 2; i++) {
-                int k = top, m = left;
-                for (; m <= right; m++) {
-                    spiralList.add(matrix[k][m]);
-                    counter++;
-                    if (counter == total)
-                        break outer;
-                }
-                for (k = top+1, m = right; k <= bottom; k++) {
-                    System.out.println("k: " + k + ", m: " + m);
-                    spiralList.add(matrix[k][m]);
-                    counter++;
-                    if (counter == total)
-                        break outer;
-                }
-                for (k = bottom, m = right - 1; m >= left; m--) {
-                    spiralList.add(matrix[k][m]);
-                    counter++;
-                    if (counter == total)
-                        break outer;
-                }
-                for (k = bottom-1, m = left; k > top; k--) {
-                    spiralList.add(matrix[k][m]);
-                    counter++;
-                    if (counter == total)
-                        break outer;
-                }
-                
-                left++;
-                right--;
-                top++;
-                bottom--;
+import java.lang.*;
+// avoid redundant comparation with 0
+public class Solution {   
+    public static int calculate(int[] maxBunnies, int curr, int candidate, int[] exits, int[][] path) {
+        int ans = 0;
+        if (max_bunnies[curr] > -1)
+            ans = maxBunnies[curr];
+        else {
+            int[] p = path[curr];
+            List<Integer> nextPods = new ArrayList<>();
+            for (int i = 0; i < p.length; i++) {
+                if (p[i] > 0)
+                    nextPods.add(i);
+            }
+            for pod in nextPods {
+                if exits.indexOf(pod) >= 0
+                    ans += p[pod];
+                else
+                    ans += calculate(maxBunnies, pod, p[pod], exits, path);
             }
         }
-        
-        return spiralList;
+        int supply = candidate == -1 || candidate > ans ? ans : candidate;
+        maxBunnies[curr] = ans-supply;
+        return supply;
     }
+
+    public static int answer(int[] entrances, int[] exits, int[][] path) { 
+        // Your code goes here.
+        int[] maxBunnies = new int[path.length];
+        int totalBunnies = 0;
+        for entrance in entrances:
+            totalBunnies += calculate(maxBunnies, entrance, -1, exits, path);
+        return totalBunnies;
+    } 
 }
