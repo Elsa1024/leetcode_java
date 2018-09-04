@@ -1,36 +1,29 @@
 import java.util.*;
 import java.lang.*;
+import java.text.*;
 // avoid redundant comparation with 0
-public class Solution {   
-    public static int calculate(int[] maxBunnies, int curr, int candidate, int[] exits, int[][] path) {
-        int ans = 0;
-        if (max_bunnies[curr] > -1)
-            ans = maxBunnies[curr];
-        else {
-            int[] p = path[curr];
-            List<Integer> nextPods = new ArrayList<>();
-            for (int i = 0; i < p.length; i++) {
-                if (p[i] > 0)
-                    nextPods.add(i);
-            }
-            for pod in nextPods {
-                if exits.indexOf(pod) >= 0
-                    ans += p[pod];
-                else
-                    ans += calculate(maxBunnies, pod, p[pod], exits, path);
+public class Solution {
+    public String findMaxGoalsProbability() {
+        List<Integer> teamGoals = new ArrayList<>();
+        teamGoals.add(1);
+        teamGoals.add(2);
+        teamGoals.add(2);
+        teamGoals.add(3);
+        Map<Integer, Integer> scoreMap = new HashMap();
+        int maxScore = 0, size = teamGoals.size();
+        for (int i = 0; i < teamGoals.size()-1; i++) {
+            for (int j = i+1; j < teamGoals.size(); j++) {
+                int score = teamGoals.get(i) + teamGoals.get(j);
+                maxScore = Math.max(maxScore, score);
+                if (scoreMap.get(score) == null)
+                    scoreMap.put(score, 0);
+                scoreMap.put(score, scoreMap.get(score)+1);
             }
         }
-        int supply = candidate == -1 || candidate > ans ? ans : candidate;
-        maxBunnies[curr] = ans-supply;
-        return supply;
+        Double probability = 1.0*scoreMap.get(maxScore)/(size*(size-1)/2);
+        DecimalFormat df = new DecimalFormat("0.00");
+        String ret =  df.format(probability).toString();
+        System.out.println("ret: " + ret);
+        return ret;
     }
-
-    public static int answer(int[] entrances, int[] exits, int[][] path) { 
-        // Your code goes here.
-        int[] maxBunnies = new int[path.length];
-        int totalBunnies = 0;
-        for entrance in entrances:
-            totalBunnies += calculate(maxBunnies, entrance, -1, exits, path);
-        return totalBunnies;
-    } 
 }

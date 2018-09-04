@@ -6,61 +6,36 @@ public class MainClass {
   /**
    * Iterate through each line of input.
    */
-  final static String ASSET_TYPE_STOCK = "STOCK";
-  final static String ASSET_TYPE_BOND = "BOND";
-  final static String TRANSACTION_TYPE_BUY = "BUY";
-  final static String TRANSACTION_TYPE_SELL = "SELL";
-  public static class Asset {
-    String name;
-    String assetType;
-    Float shares;
-    Float price;
-    Float accruedInterest;
-    Asset(String str) {
-      String[] parameter = str.split(",");
-      name = parameter[0];
-      assetType = parameter[1];
-      shares = Float.valueOf(parameter[2]);
-      price = Float.valueOf(parameter[3]);
-      accruedInterest = Float.valueOf(parameter[4]);
-    }
-    String trade(Asset that) {
-      if (!that.name.equals(this.name))
-        return "";
-      StringBuilder sb = new StringBuilder();
-      Float expectedShares = 0.0F;
-      if (this.assetType.equals(ASSET_TYPE_STOCK))
-        expectedShares = that.shares * that.price / this.price;
-      else if (this.assetType.equals(ASSET_TYPE_BOND))
-        expectedShares = that.shares * (that.price + that.accruedInterest) / (this.price + this.accruedInterest);
-      sb.append(expectedShares > this.shares ? TRANSACTION_TYPE_BUY : TRANSACTION_TYPE_SELL);
-      sb.append("," + this.name + ",");
-      sb.append(Math.round(Math.abs(expectedShares-this.shares)));
-      return sb.toString();
-    }
-  }
-  public static void main(String[] args) throws IOException {
- /*   InputStreamReader reader = new InputStreamReader(System.in, StandardCharsets.UTF_8);
-    BufferedReader in = new BufferedReader(reader);
-    String line;*/
-    String line = "Google,STOCK,10,50,0|Microsoft,STOCK,15,50,0|IBM,BOND,15,100,0.05:IBM,BOND,20,100,0.05|Google,STOCK,15,50,0|Microsoft,STOCK,10,50,0.05";
-    Map<String, Asset> portfolio = new HashMap(), benchmark = new HashMap();
-    // while ((line = ) != null) {
-        String[] portfolioAndBenchmark = line.split(":");
-        System.out.println("portfolioAndBenchmark[0]: " + portfolioAndBenchmark[0]);
-        for (String str : portfolioAndBenchmark[0].split("\\|")) {
-        System.out.println("str: " + str);
-          Asset asset = new Asset(str);
-          portfolio.put(asset.name, asset);
-        }
-        for (String str : portfolioAndBenchmark[1].split("\\|")) {
-          Asset asset = new Asset(str);
-          benchmark.put(asset.name, asset);
-        }
-    // }
-    for (Map.Entry<String, Asset> me : portfolio.entrySet()) {
-      Asset asset = me.getValue();
-      System.out.println(asset.trade(benchmark.get(asset.name)));
-    }
+ /* List<Integer> g = new ArrayList<>();
+  g.add(4);
+  g.add(1);
+  g.add(2);
+  g.add(2);
+  g.add(3);*/
+  public static void main(String[] args) {
+      String test = ",Course,Percent Grade,Letter Grade";
+      String[] result = test.split(",");
+      System.out.println("size: " + result.length);
+     // String ret = (new Solution()).findMaxGoalsProbability(); 
   }
 }
+
+/*
+static String findMaxGoalsProbability(List<Integer> teamGoals) {
+        Map<Integer, Integer> scoreMap = new HashMap();
+        int maxScore = Integer.MIN_VALUE, size = teamGoals.size();
+        for (int i = 0; i < teamGoals.size()-1; i++) {
+            for (int j = i+1; j < teamGoals.size(); j++) {
+                int score = teamGoals.get(i) + teamGoals.get(j);
+                maxScore = Math.max(maxScore, score);
+                if (scoreMap.get(score) == null)
+                    scoreMap.put(score, 0);
+                scoreMap.put(score, scoreMap.get(score)+1);
+            }
+        }
+        Double probability = scoreMap.get(maxScore) != null ? 1.0*scoreMap.get(maxScore)/(size*(size-1)/2) : 0.00;
+        DecimalFormat df = new DecimalFormat("0.00");
+        return df.format(probability).toString();
+    }
+
+ */
