@@ -1,38 +1,34 @@
-class Interval:
-    def __init__(self, s=1, e=4):
-        self.start = s
-        end = e
+import collections
+import re
+import numpy
 
-def merge(intervals):
-    starts, ends = [], []
-    ans = []
-    for interval in intervals:
-        starts.append(interval.start)
-        ends.append(interval.end)
-    starts.sort()
-    ends.sort()
-    if len(starts) == 0:
-        return ans
-    start, end = starts.pop(0), ends[0]+1
-    start_count, end_count = 1, 0
-    while len(ends):
-        while len(ends) and ends[0] == end:
-            ends.pop(0)
-        if len(ends) == 0:
-            break
-        end = ends.pop(0)
-        end_count += 1
-        while len(starts) and starts[0] <= end:
-            starts.pop(0)
-            start_count += 1
-        if start_count == end_count:
-            ans.append(Interval(start, end))
-            if len(starts):
-                start = starts.pop(0)
-                start_count += 1
-    return ans
+from urllib.request import urlopen
 
-interval = Interval()
-intervals = [interval, interval]
-ret = merge(intervals)
-print("ret: ", ret)
+def write_chunks_of_five(words,fname):
+    '''
+    :param: words
+    :type: list
+    :param: fname
+    :type: str
+    '''
+    # YOUR CODE HERE
+    assert type(words) == list
+    for word in words:
+        assert type(word) == str
+    f = open(fname, 'w')
+    for i in range(0, len(words), 5):
+        for j in range(i, i+5):
+            if j < len(words):
+              f.write(words[j])
+              if j < i+4:
+                f.write(' ')
+              elif i != len(words)-1:
+                f.write('\n')
+    f.close()
+
+
+u='https://storage.googleapis.com/class-notes-181217.appspot.com/google-10000-english-no-swears.txt'
+response = urlopen(u)
+words = [i.strip().decode('utf8') for i in response.readlines()]
+
+write_chunks_of_five(words, 'test_final.txt')

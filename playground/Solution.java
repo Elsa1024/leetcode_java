@@ -1,29 +1,28 @@
 import java.util.*;
 import java.lang.*;
 import java.text.*;
-// avoid redundant comparation with 0
-public class Solution {
-    public String findMaxGoalsProbability() {
-        List<Integer> teamGoals = new ArrayList<>();
-        teamGoals.add(1);
-        teamGoals.add(2);
-        teamGoals.add(2);
-        teamGoals.add(3);
-        Map<Integer, Integer> scoreMap = new HashMap();
-        int maxScore = 0, size = teamGoals.size();
-        for (int i = 0; i < teamGoals.size()-1; i++) {
-            for (int j = i+1; j < teamGoals.size(); j++) {
-                int score = teamGoals.get(i) + teamGoals.get(j);
-                maxScore = Math.max(maxScore, score);
-                if (scoreMap.get(score) == null)
-                    scoreMap.put(score, 0);
-                scoreMap.put(score, scoreMap.get(score)+1);
+
+class Solution {
+    public int[] searchRange(int[] nums, int target) {
+        if (nums == null || nums.length == 0)
+            return new int[]{-1, -1};
+        int start = findGreaterEqual(nums, 0, nums.length, target);
+        if (nums[start] != target)
+            return new int[]{-1, -1};
+        int end = findGreaterEqual(nums, 0, nums.length, target+1)-1;
+        return new int[]{start, end};
+    }
+    
+    private int findGreaterEqual(int[] nums, int lo, int hi, int target) {
+        while (lo < hi) {
+            int mid = lo + (int)(hi-lo)/2;
+
+            if (nums[mid] < target) {
+                lo = mid+1;
+            } else {
+                hi = mid;
             }
         }
-        Double probability = 1.0*scoreMap.get(maxScore)/(size*(size-1)/2);
-        DecimalFormat df = new DecimalFormat("0.00");
-        String ret =  df.format(probability).toString();
-        System.out.println("ret: " + ret);
-        return ret;
+        return lo;
     }
 }
